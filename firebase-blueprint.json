@@ -1,0 +1,254 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with authentication and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Display name" },
+        "photoURL": { "type": "string", "description": "Avatar URL" },
+        "role": { "type": "string", "enum": ["owner", "admin", "member"], "description": "User role" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "role"]
+    },
+    "BusinessProfile": {
+      "title": "BusinessProfile",
+      "description": "Active business profile details for marketing",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "description": "Owner user UID" },
+        "name": { "type": "string", "description": "Business Name" },
+        "tagline": { "type": "string", "description": "Tagline or pitch" },
+        "industry": { "type": "string", "description": "Industry or niche" },
+        "audience": { "type": "string", "description": "Target audience" },
+        "tone": { "type": "string", "description": "Brand tone" },
+        "targetGeo": { "type": "string", "description": "Target geography" },
+        "valueProp": { "type": "string", "description": "Value proposition" },
+        "website": { "type": "string", "description": "Website URL" },
+        "foundedYear": { "type": "string", "description": "Founded year" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "name", "industry", "audience"]
+    },
+    "Campaign": {
+      "title": "Campaign",
+      "description": "365 Autopilot campaign matrix and schedule",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "description": "Owner user UID" },
+        "overview": { "type": "string", "description": "Strategic overview" },
+        "strategyCadence": { "type": "object", "description": "Cadence explanation" },
+        "dailyPosts": { "type": "array", "description": "List of daily micro-posts" },
+        "weeklyDrops": { "type": "array", "description": "List of weekly thought-leadership drops" },
+        "monthlyPR": { "type": "array", "description": "List of monthly wire releases" },
+        "yearlyCampaigns": { "type": "array", "description": "List of yearly flagship campaigns" },
+        "metricsEstimate": { "type": "object", "description": "Estimated annual metrics" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "overview"]
+    },
+    "SocialChannel": {
+      "title": "SocialChannel",
+      "description": "Connected social media or PR wire channel",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "description": "Owner user UID" },
+        "id": { "type": "string", "description": "Channel identifier" },
+        "name": { "type": "string", "description": "Channel display name" },
+        "type": { "type": "string", "description": "Platform type" },
+        "handle": { "type": "string", "description": "Handle or URL" },
+        "connected": { "type": "boolean", "description": "Connection state" },
+        "automated": { "type": "boolean", "description": "Autopilot enabled" },
+        "lastSync": { "type": "string", "description": "Last sync timestamp" },
+        "followersCount": { "type": "string", "description": "Audience size" },
+        "monthlyReach": { "type": "string", "description": "Monthly volume" },
+        "frequency": { "type": "string", "description": "Posting cadence" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "id", "name", "type", "connected", "automated"]
+    },
+    "AutopilotLog": {
+      "title": "AutopilotLog",
+      "description": "Log of executed publicity or social post",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "description": "Owner user UID" },
+        "id": { "type": "string", "description": "Log identifier" },
+        "timestamp": { "type": "string", "description": "Readable timestamp" },
+        "title": { "type": "string", "description": "Dispatch title" },
+        "channel": { "type": "string", "description": "Distribution network" },
+        "cadence": { "type": "string", "description": "Cadence type" },
+        "reach": { "type": "number", "description": "Delivered reach" },
+        "status": { "type": "string", "description": "Execution status" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "id", "title", "channel", "reach", "status"]
+    },
+    "MediaAsset": {
+      "title": "MediaAsset",
+      "description": "Generated or edited image, video, music, or transcribed audio asset",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "description": "Owner user UID" },
+        "id": { "type": "string", "description": "Asset ID" },
+        "type": { "type": "string", "enum": ["image", "video", "music", "transcript"], "description": "Media type" },
+        "title": { "type": "string", "description": "Title or prompt" },
+        "url": { "type": "string", "description": "Media URL or base64 data" },
+        "model": { "type": "string", "description": "Gemini model used" },
+        "metadata": { "type": "object", "description": "Optional metadata" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "id", "type", "title"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Chat message with Red Robot Autonomous CMO",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "description": "Owner user UID" },
+        "id": { "type": "string", "description": "Message ID" },
+        "role": { "type": "string", "enum": ["user", "model"], "description": "Sender role" },
+        "content": { "type": "string", "description": "Message text" },
+        "modelUsed": { "type": "string", "description": "Model used" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUid", "id", "role", "content"]
+    },
+    "PropertyListing": {
+      "title": "PropertyListing",
+      "description": "KeyDirect property listing across Nigerian cities and neighbourhoods",
+      "type": "object",
+      "properties": {
+        "ownerUid": { "type": "string", "description": "Listing creator UID" },
+        "id": { "type": "string", "description": "Property ID" },
+        "title": { "type": "string", "description": "Property headline" },
+        "category": { "type": "string", "enum": ["Apartments", "Rooms", "Commercial", "Hotels", "Rental", "Plots / Land"], "description": "Property category" },
+        "city": { "type": "string", "description": "Nigerian City (e.g. Lagos, Abuja, Port Harcourt)" },
+        "neighborhood": { "type": "string", "description": "Neighbourhood (e.g. Lekki Phase 1, Ikoyi, Ikeja)" },
+        "priceNaira": { "type": "number", "description": "Price in Naira ₦" },
+        "pricePeriod": { "type": "string", "description": "per year or total" },
+        "bedrooms": { "type": "number", "description": "Number of bedrooms" },
+        "bathrooms": { "type": "number", "description": "Number of bathrooms" },
+        "advertiserType": { "type": "string", "enum": ["Owner", "Agent", "Developer"], "description": "Advertiser category" },
+        "directOwner": { "type": "boolean", "description": "Direct connection to owner" },
+        "imageUrl": { "type": "string", "description": "Cover image" },
+        "contactPhone": { "type": "string", "description": "Contact telephone or WhatsApp" },
+        "description": { "type": "string", "description": "Property details" },
+        "isDigitalBillboard": { "type": "boolean", "description": "Promoted on Digital Billboard" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "category", "city", "priceNaira"]
+    },
+    "Gig": {
+      "title": "Gig",
+      "description": "Fiverr-style pre-packaged service gig",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Gig identifier" },
+        "title": { "type": "string", "description": "Gig title" },
+        "category": { "type": "string", "description": "Service category" },
+        "priceUSD": { "type": "number", "description": "Price in USD" },
+        "priceNGN": { "type": "number", "description": "Price in Naira" },
+        "deliveryDays": { "type": "number", "description": "Delivery turnaround in days" },
+        "revisions": { "type": "string", "description": "Revisions included" },
+        "description": { "type": "string", "description": "Full gig description" },
+        "features": { "type": "array", "description": "List of included deliverables" },
+        "techStack": { "type": "array", "description": "Tech stack used" },
+        "rating": { "type": "number", "description": "Customer review rating" },
+        "reviewsCount": { "type": "number", "description": "Total reviews count" },
+        "badge": { "type": "string", "description": "Top Rated or Fast Delivery badge" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "category", "priceUSD", "deliveryDays"]
+    },
+    "Job": {
+      "title": "Job",
+      "description": "Upwork-style client job posting",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Job identifier" },
+        "clientName": { "type": "string", "description": "Client name or company" },
+        "clientLocation": { "type": "string", "description": "Client location" },
+        "title": { "type": "string", "description": "Job title" },
+        "description": { "type": "string", "description": "Job description" },
+        "budgetUSD": { "type": "number", "description": "Job budget in USD" },
+        "budgetType": { "type": "string", "enum": ["fixed", "hourly"], "description": "Fixed or Hourly" },
+        "experienceLevel": { "type": "string", "description": "Entry, Intermediate, or Expert" },
+        "urgency": { "type": "string", "description": "Urgency timeline" },
+        "skillsRequired": { "type": "array", "description": "Required skills list" },
+        "proposalsCount": { "type": "number", "description": "Number of received proposals" },
+        "status": { "type": "string", "enum": ["open", "in_progress", "completed"], "description": "Job status" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "description", "budgetUSD"]
+    },
+    "Proposal": {
+      "title": "Proposal",
+      "description": "Proposal submitted to a client job",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Proposal ID" },
+        "jobId": { "type": "string", "description": "Target Job ID" },
+        "freelancerName": { "type": "string", "description": "Freelancer name" },
+        "bidAmountUSD": { "type": "number", "description": "Bid price" },
+        "estimatedDays": { "type": "number", "description": "Estimated turnaround" },
+        "coverLetter": { "type": "string", "description": "Proposal text" },
+        "aiGenerated": { "type": "boolean", "description": "Generated via AI Superpower" },
+        "milestones": { "type": "array", "description": "Project milestone deliverables" },
+        "status": { "type": "string", "enum": ["submitted", "accepted", "under_review"], "description": "Proposal status" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "jobId", "bidAmountUSD", "coverLetter"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile document"
+    },
+    "/businesses/{businessId}": {
+      "schema": { "$ref": "#/entities/BusinessProfile" },
+      "description": "Business profile documents"
+    },
+    "/campaigns/{campaignId}": {
+      "schema": { "$ref": "#/entities/Campaign" },
+      "description": "365 Autopilot campaign documents"
+    },
+    "/channels/{channelId}": {
+      "schema": { "$ref": "#/entities/SocialChannel" },
+      "description": "Connected social channels"
+    },
+    "/logs/{logId}": {
+      "schema": { "$ref": "#/entities/AutopilotLog" },
+      "description": "Autopilot execution logs"
+    },
+    "/media/{mediaId}": {
+      "schema": { "$ref": "#/entities/MediaAsset" },
+      "description": "Generated multimodal media assets"
+    },
+    "/chats/{chatId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Chat messages with Red Robot CMO and Studio Direct Messages"
+    },
+    "/properties/{propertyId}": {
+      "schema": { "$ref": "#/entities/PropertyListing" },
+      "description": "KeyDirect real estate properties"
+    },
+    "/gigs/{gigId}": {
+      "schema": { "$ref": "#/entities/Gig" },
+      "description": "SimeonJr Studio Hub pre-packaged service gigs"
+    },
+    "/jobs/{jobId}": {
+      "schema": { "$ref": "#/entities/Job" },
+      "description": "SimeonJr Studio Hub client job postings"
+    },
+    "/proposals/{proposalId}": {
+      "schema": { "$ref": "#/entities/Proposal" },
+      "description": "Job proposals submitted by SimeonJr or candidates"
+    }
+  }
+}

@@ -1,0 +1,129 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net - Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Connection probe document for health check
+    match /test/{docId} {
+      allow read: if true;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.uid == request.auth.uid;
+      allow update: if isOwner(userId) && request.resource.data.uid == request.auth.uid;
+      allow delete: if false;
+    }
+
+    // Businesses Collection
+    match /businesses/{businessId} {
+      allow get: if isSignedIn() && (resource.data.ownerUid == request.auth.uid || businessId == 'demo');
+      allow list: if isSignedIn() && (resource.data.ownerUid == request.auth.uid || resource.data.ownerUid == 'demo');
+      allow create: if isSignedIn() && request.resource.data.ownerUid == request.auth.uid && isValidId(businessId);
+      allow update: if isSignedIn() && resource.data.ownerUid == request.auth.uid && request.resource.data.ownerUid == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Campaigns Collection
+    match /campaigns/{campaignId} {
+      allow get: if isSignedIn() && (resource.data.ownerUid == request.auth.uid || campaignId == 'demo');
+      allow list: if isSignedIn() && (resource.data.ownerUid == request.auth.uid || resource.data.ownerUid == 'demo');
+      allow create: if isSignedIn() && request.resource.data.ownerUid == request.auth.uid && isValidId(campaignId);
+      allow update: if isSignedIn() && resource.data.ownerUid == request.auth.uid && request.resource.data.ownerUid == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Channels Collection
+    match /channels/{channelId} {
+      allow get: if isSignedIn() && (resource.data.ownerUid == request.auth.uid || resource.data.ownerUid == 'demo');
+      allow list: if isSignedIn() && (resource.data.ownerUid == request.auth.uid || resource.data.ownerUid == 'demo');
+      allow create: if isSignedIn() && request.resource.data.ownerUid == request.auth.uid && isValidId(channelId);
+      allow update: if isSignedIn() && resource.data.ownerUid == request.auth.uid && request.resource.data.ownerUid == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Autopilot Execution Logs
+    match /logs/{logId} {
+      allow get: if isSignedIn() && (resource.data.ownerUid == request.auth.uid || resource.data.ownerUid == 'demo');
+      allow list: if isSignedIn() && (resource.data.ownerUid == request.auth.uid || resource.data.ownerUid == 'demo');
+      allow create: if isSignedIn() && request.resource.data.ownerUid == request.auth.uid && isValidId(logId);
+      allow update: if false;
+      allow delete: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Media Assets Collection (Images, Music, Videos, Transcripts)
+    match /media/{mediaId} {
+      allow get: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.ownerUid == request.auth.uid && isValidId(mediaId);
+      allow update: if isSignedIn() && resource.data.ownerUid == request.auth.uid && request.resource.data.ownerUid == request.auth.uid;
+      allow delete: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Chat Messages Collection (Red Robot CMO + SimeonJr Studio Direct Messaging)
+    match /chats/{chatId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(chatId);
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // KeyDirect Property Listings Collection (Public read for seekers, verified write)
+    match /properties/{propertyId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidId(propertyId);
+      allow update: if isSignedIn() && (resource.data.ownerUid == request.auth.uid || resource.data.ownerUid == 'demo');
+      allow delete: if isSignedIn() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // SimeonJr Studio Hub: Fiverr-style Gigs Collection (Public read, verified write)
+    match /gigs/{gigId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidId(gigId);
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    // SimeonJr Studio Hub: Upwork-style Client Jobs Collection (Public read, client submit)
+    match /jobs/{jobId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidId(jobId);
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    // KeyDirect Property Viewing Requests
+    match /inspections/{inspectionId} {
+      allow read: if isSignedIn();
+      allow create: if isValidId(inspectionId);
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+    // KeyDirect Listing Reports
+    match /reports/{reportId} {
+      allow read: if isSignedIn();
+      allow create: if isValidId(reportId);
+      allow update: if false;
+      allow delete: if isSignedIn();
+    }
+  }
+}

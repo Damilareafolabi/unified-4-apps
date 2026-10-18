@@ -1,0 +1,12 @@
+{
+  "projectId": "your-firebase-project-id",
+  "appId": "1:123456789000:web:placeholder-app-id",
+  "apiKey": "AIzaSyFakePlaceholderKeyForVSCodeDevelopmentOnly",
+  "authDomain": "your-firebase-project-id.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "your-firebase-project-id.firebasestorage.app",
+  "messagingSenderId": "123456789000",
+  "measurementId": "",
+  "oAuthClientId": "123456789000-placeholder.apps.googleusercontent.com",
+  "recaptchaSiteKey": ""
+}

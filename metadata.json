@@ -1,0 +1,7 @@
+{
+  "name": "LazyCEO - 365 Autopilot Marketing & Publicity Engine",
+  "description": "The autonomous marketing platform that promotes and runs global publicity for your business 365 days a year with performance analytics and automated social media integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
